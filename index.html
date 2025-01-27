@@ -38,6 +38,13 @@
     button:hover {
       background-color: #45a049;
     }
+    #responseMessage {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #f4f4f4;
+      border-radius: 4px;
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -48,55 +55,82 @@
       <input type="file" id="fileUpload" name="fileUpload" multiple>
 
       <!-- Text Field -->
-      <input type="text" id="userText" name="userText" placeholder="Enter file name" required>
+      <input type="text" id="userText" name="userText" placeholder="Enter some text" required>
 
       <!-- Submit Button -->
       <button type="button" onclick="submitForm()">Submit</button>
     </form>
+
+    <!-- Response Message -->
+    <div id="responseMessage"></div>
   </div>
 
   <script>
     async function submitForm() {
       const fileInput = document.getElementById("fileUpload");
       const textInput = document.getElementById("userText");
-  
+      const responseMessage = document.getElementById("responseMessage");
+
+      // Get files and text
       const files = fileInput.files;
       const userText = textInput.value;
-  
-      if (files.length > 0) {
-        const file = files[0]; // Get the first file (you can modify for multiple files if needed)
-  
-        // Read the file content
-        const fileContent = await readFileContent(file);
-  
-        // Send data to Netlify Function (POST request)
-        const response = await fetch('https://your-netlify-site.netlify.app/.netlify/functions/create-file', {
-          method: 'POST',
+
+      // Display the data (you can process or send it elsewhere)
+      console.log("Text:", userText);
+      console.log("Files:");
+      for (let i = 0; i < files.length; i++) {
+        console.log(files[i].name);
+      }
+
+      // Prepare the data for the API request
+      const formData = {
+        fileName: userText, // Use the text input as the file name
+        fileContent: await readFileContent(files[0]) // Read the content of the selected file
+      };
+
+      // Send the data to the Netlify function
+      try {
+        const response = await fetch("https://your-netlify-site.netlify.app/.netlify/functions/create-file", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            fileName: userText, // Rename the file with user input
-            fileContent: fileContent, // File content (base64 encoded)
-          }),
+          body: JSON.stringify(formData),
         });
-  
+
         const result = await response.json();
+
         if (response.ok) {
-          alert('File created and committed successfully!');
+          responseMessage.style.backgroundColor = "#d4edda";
+          responseMessage.style.color = "#155724";
+          responseMessage.textContent = result.message || "File created successfully!";
         } else {
-          alert('Error: ' + result.error);
+          responseMessage.style.backgroundColor = "#f8d7da";
+          responseMessage.style.color = "#721c24";
+          responseMessage.textContent = result.error || "Failed to create the file.";
         }
+
+        responseMessage.style.display = "block";
+      } catch (error) {
+        responseMessage.style.backgroundColor = "#f8d7da";
+        responseMessage.style.color = "#721c24";
+        responseMessage.textContent = "An error occurred while submitting the form.";
+        responseMessage.style.display = "block";
+        console.error("Error:", error);
       }
     }
-  
-    // Read the content of the file as a base64 string
+
+    // Helper function to read the file content
     function readFileContent(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
-        reader.onload = () => resolve(reader.result.split(',')[1]); // Get base64 content
+        reader.onload = function (event) {
+          resolve(event.target.result);
+        };
         reader.onerror = reject;
         reader.readAsDataURL(file);
       });
     }
   </script>
+</body>
+</html>

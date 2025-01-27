@@ -58,7 +58,7 @@
       <input type="text" id="userText" name="userText" placeholder="Enter some text" required>
 
       <!-- Submit Button -->
-      <button type="button" onclick="callSimpleLogFunction()">Submit</button>
+      <button type="button" onclick="submitForm()">Submit</button>
     </form>
 
     <!-- Response Message -->
@@ -104,11 +104,11 @@
             if (response.ok) {
             responseMessage.style.backgroundColor = "#d4edda";
             responseMessage.style.color = "#155724";
-            responseMessage.textContent = result.message || "File created and renamed successfully!";
+            responseMessage.textContent = "File created and renamed successfully!";
             } else {
             responseMessage.style.backgroundColor = "#f8d7da";
             responseMessage.style.color = "#721c24";
-            responseMessage.textContent = result.error || "Failed to create or rename the file.";
+            responseMessage.textContent = "Failed to create or rename the file.";
             }
 
             responseMessage.style.display = "block";

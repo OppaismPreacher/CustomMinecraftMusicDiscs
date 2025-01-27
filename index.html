@@ -67,58 +67,58 @@
 
   <script>
     async function submitForm() {
-    const fileInput = document.getElementById("fileUpload");
-    const textInput = document.getElementById("userText");
-    const responseMessage = document.getElementById("responseMessage");
+        const fileInput = document.getElementById("fileUpload");
+        const textInput = document.getElementById("userText");
+        const responseMessage = document.getElementById("responseMessage");
 
-    // Get files and text input
-    const files = fileInput.files;
-    const userText = textInput.value;
+        // Get files and text input
+        const files = fileInput.files;
+        const userText = textInput.value;
 
-    // Display the data (for debugging purposes)
-    console.log("Text:", userText);
-    console.log("Files:");
-    for (let i = 0; i < files.length; i++) {
-        console.log(files[i].name);
-    }
-
-    // Prepare the data for the API request
-    const formData = {
-        fileName: userText, // User-defined file name
-        fileContent: await readFileContent(files[0]), // Read the content of the first selected file
-    };
-
-    // Send the data to the Netlify function (to create and rename the file)
-    try {
-        const response = await fetch("https://darling-klepon-2a4c36.netlify.app/.netlify/functions/create-commit-file", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData), // Send file data for creation and renaming
-        });
-
-        const result = await response.json();
-
-        // Check if the response is successful
-        if (response.ok) {
-        responseMessage.style.backgroundColor = "#d4edda";
-        responseMessage.style.color = "#155724";
-        responseMessage.textContent = result.message || "File created and renamed successfully!";
-        } else {
-        responseMessage.style.backgroundColor = "#f8d7da";
-        responseMessage.style.color = "#721c24";
-        responseMessage.textContent = result.error || "Failed to create or rename the file.";
+        // Display the data (for debugging purposes)
+        console.log("Text:", userText);
+        console.log("Files:");
+        for (let i = 0; i < files.length; i++) {
+            console.log(files[i].name);
         }
 
-        responseMessage.style.display = "block";
-    } catch (error) {
-        responseMessage.style.backgroundColor = "#f8d7da";
-        responseMessage.style.color = "#721c24";
-        responseMessage.textContent = "An error occurred while submitting the form.";
-        responseMessage.style.display = "block";
-        console.error("Error:", error);
-    }
+        // Prepare the data for the API request
+        const formData = {
+            fileName: userText, // User-defined file name
+            fileContent: await readFileContent(files[0]), // Read the content of the first selected file
+        };
+
+        // Send the data to the Netlify function (to create and rename the file)
+        try {
+            const response = await fetch("https://darling-klepon-2a4c36.netlify.app/.netlify/functions/create-commit-file", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData), // Send file data for creation and renaming
+            });
+
+            const result = await response.json();
+
+            // Check if the response is successful
+            if (response.ok) {
+            responseMessage.style.backgroundColor = "#d4edda";
+            responseMessage.style.color = "#155724";
+            responseMessage.textContent = result.message || "File created and renamed successfully!";
+            } else {
+            responseMessage.style.backgroundColor = "#f8d7da";
+            responseMessage.style.color = "#721c24";
+            responseMessage.textContent = result.error || "Failed to create or rename the file.";
+            }
+
+            responseMessage.style.display = "block";
+        } catch (error) {
+            responseMessage.style.backgroundColor = "#f8d7da";
+            responseMessage.style.color = "#721c24";
+            responseMessage.textContent = "An error occurred while submitting the form.";
+            responseMessage.style.display = "block";
+            console.error("Error:", error);
+        }
     }
 
 

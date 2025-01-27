@@ -1,4 +1,12 @@
-const fetch = require('node-fetch');
+let fetch;
+
+async function loadFetch() {
+    if (!fetch) {
+      fetch = (await import('node-fetch')).default; // Dynamically import node-fetch
+    }
+    return fetch;
+  }
+
 const { GITHUB_TOKEN, REPO_OWNER, REPO_NAME } = process.env;
 
 exports.handler = async (event, context) => {
@@ -20,6 +28,7 @@ exports.handler = async (event, context) => {
         });
 
         try {
+            const fetch = await loadFetch(); // Ensure fetch is loaded dynamically
             console.log('Making API request to GitHub...');
             const response = await fetch(url, {
                 method: 'PUT',

@@ -1,10 +1,17 @@
 let fetch;
 
 async function loadFetch() {
-    if (!fetch) {
-      fetch = (await import('node-fetch')).default; // Dynamically import node-fetch
+    try {
+      if (!fetch) {
+        console.log('Loading fetch dynamically...');
+        fetch = (await import('node-fetch')).default; // Dynamically import node-fetch
+        console.log('fetch loaded successfully');
+      }
+      return fetch;
+    } catch (error) {
+      console.error('Failed to load fetch:', error);
+      throw new Error('fetch failed');
     }
-    return fetch;
   }
 
 const { GITHUB_TOKEN, REPO_OWNER, REPO_NAME } = process.env;

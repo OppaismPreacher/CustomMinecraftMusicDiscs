@@ -1,35 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitHub File Manager</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Form with JS</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    input[type="file"],
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
 </head>
 <body>
-    <h1>GitHub File Manager</h1>
-    <form id="fileForm">
-        <input type="text" id="fileName" placeholder="File name" required>
-        <textarea id="fileContent" placeholder="File content" required></textarea>
-        <button type="submit">Create & Commit File</button>
+  <div class="container">
+    <h2>Upload Files and Submit Text</h2>
+    <form id="myForm">
+      <!-- File Input -->
+      <input type="file" id="fileUpload" name="fileUpload" multiple>
+
+      <!-- Text Field -->
+      <input type="text" id="userText" name="userText" placeholder="Enter some text" required>
+
+      <!-- Submit Button -->
+      <button type="button" onclick="submitForm()">Submit</button>
     </form>
+  </div>
 
-    <script>
-        document.getElementById('fileForm').addEventListener('submit', function(event) {
-            event.preventDefault();
+  <script>
+    function submitForm() {
+      const fileInput = document.getElementById("fileUpload");
+      const textInput = document.getElementById("userText");
 
-            const fileName = document.getElementById('fileName').value;
-            const fileContent = document.getElementById('fileContent').value;
+      // Get files and text
+      const files = fileInput.files;
+      const userText = textInput.value;
 
-            // Send request to the serverless function to create and commit the file
-            fetch('/create-commit-file', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ fileName, fileContent })
-            })
-            .then(response => response.json())
-            .then(data => alert('File created and committed!'))
-            .catch(error => alert('Error: ' + error.message));
-        });
-    </script>
+      // Display the data (you can process or send it elsewhere)
+      console.log("Text:", userText);
+      console.log("Files:");
+      for (let i = 0; i < files.length; i++) {
+        console.log(files[i].name);
+      }
+      
+      // Optionally, display a message
+      alert("Form submitted!");
+    }
+  </script>
 </body>
 </html>

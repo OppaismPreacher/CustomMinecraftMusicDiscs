@@ -7,6 +7,8 @@ exports.handler = async (event, context) => {
           body: JSON.stringify({ message: 'Method Not Allowed' }),
         };
       }
+
+      console.log(event)
   
       // Parse the incoming form data
       const formData = new URLSearchParams(event.body);

@@ -122,35 +122,46 @@
 
 
     async function callSimpleLogFunction() {
-      const responseMessage = document.getElementById("responseMessage");
+  const responseMessage = document.getElementById("responseMessage");
 
-      try {
-        // Call the new simple-log function
-        const response = await fetch("https://darling-klepon-2a4c36.netlify.app/.netlify/functions/simple-log", {
-          method: "GET",
-        });
+  try {
+    // Call the simple-log function
+    const response = await fetch("https://darling-klepon-2a4c36.netlify.app/.netlify/functions/simple-log", {
+      method: "GET",
+    });
 
-        const result = await response.json();
+    // Log the raw response text
+    const rawResponse = await response.text();
+    console.log("Raw Response:", rawResponse); // Log the response body
 
-        if (response.ok) {
-          responseMessage.style.backgroundColor = "#d4edda";
-          responseMessage.style.color = "#155724";
-          responseMessage.textContent = result.message || "Log function ran successfully!";
-        } else {
-          responseMessage.style.backgroundColor = "#f8d7da";
-          responseMessage.style.color = "#721c24";
-          responseMessage.textContent = result.error || "Failed to run the log function.";
-        }
-
-        responseMessage.style.display = "block";
-      } catch (error) {
-        responseMessage.style.backgroundColor = "#f8d7da";
-        responseMessage.style.color = "#721c24";
-        responseMessage.textContent = "An error occurred while calling the log function.";
-        responseMessage.style.display = "block";
-        console.error("Error:", error);
-      }
+    // Try parsing the JSON response
+    let result;
+    try {
+      result = JSON.parse(rawResponse);
+    } catch (e) {
+      console.error("Error parsing JSON:", e);
+      result = { message: rawResponse }; // If not JSON, treat as message
     }
+
+    if (response.ok) {
+      responseMessage.style.backgroundColor = "#d4edda";
+      responseMessage.style.color = "#155724";
+      responseMessage.textContent = result.message || "Log function ran successfully!";
+    } else {
+      responseMessage.style.backgroundColor = "#f8d7da";
+      responseMessage.style.color = "#721c24";
+      responseMessage.textContent = result.error || "Failed to run the log function.";
+    }
+
+    responseMessage.style.display = "block";
+  } catch (error) {
+    responseMessage.style.backgroundColor = "#f8d7da";
+    responseMessage.style.color = "#721c24";
+    responseMessage.textContent = "An error occurred while calling the log function.";
+    responseMessage.style.display = "block";
+    console.error("Error:", error);
+  }
+}
 
     // Helper function to read the file content
     function readFileContent(file) {

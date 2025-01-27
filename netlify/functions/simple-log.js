@@ -4,7 +4,7 @@ exports.handler = async (event, context) => {
   
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: "Function ran successfully!" }),
+      body: JSON.stringify({ message: "Function ran successfully :):):):):):):) !" }),
       headers: {
         "Access-Control-Allow-Origin": "*", // Allow any origin
         "Access-Control-Allow-Methods": "GET, POST", // Allow specific methods

@@ -72,29 +72,17 @@
         const responseMessage = document.getElementById("responseMessage");
 
         // Get files and text input
-        const files = fileInput.files;
+        const file = fileInput.files[0];
         const userText = textInput.value;
 
-        // Display the data (for debugging purposes)
-        console.log("Text:", userText);
-        console.log("Files:");
-        for (let i = 0; i < files.length; i++) {
-            console.log(files[i].name);
-        }
-
-        // Prepare the data for the API request
-        const formData = JSON.stringify({
-            fileName: userText, // User-defined file name
-            fileContent: await readFileContent(files[0]), // Read the content of the first selected file
-        });
+        const formData = new FormData();
+        formData.append("fileName", userText); // Append the text data
+        formData.append("file", file); // Append the Blob (MP3 file)
 
         // Send the data to the Netlify function (to create and rename the file)
         try {
             const response = await fetch("https://darling-klepon-2a4c36.netlify.app/.netlify/functions/create-commit-file", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
             body: formData, // Send file data for creation and renaming
             });
 

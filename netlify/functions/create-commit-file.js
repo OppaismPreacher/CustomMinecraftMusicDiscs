@@ -1,22 +1,26 @@
-const fetch = require('node-fetch'); // Ensure this is installed
-const { GITHUB_TOKEN, REPO_OWNER, REPO_NAME } = process.env; // GitHub Token and repo details from Netlify's environment variables
+const fetch = require('node-fetch');
+const { GITHUB_TOKEN, REPO_OWNER, REPO_NAME } = process.env;
 
 exports.handler = async (event, context) => {
     if (event.httpMethod === 'POST') {
-        // Parse the incoming data
+        // Log incoming event data
+        console.log('Received event:', event);
+
         const { fileName, fileContent } = JSON.parse(event.body);
 
-        // GitHub API URL to create or update a file
+        // Log parsed data
+        console.log('File name:', fileName);
+        console.log('File content length:', fileContent.length);
+
         const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${fileName}`;
 
-        // Prepare the request body for the GitHub API (with base64 encoding)
         const body = JSON.stringify({
             message: `Create file: ${fileName}`,
-            content: Buffer.from(fileContent).toString('base64') // Encode content to base64
+            content: Buffer.from(fileContent).toString('base64')
         });
 
         try {
-            // Make the API request to GitHub
+            console.log('Making API request to GitHub...');
             const response = await fetch(url, {
                 method: 'PUT',
                 headers: {
@@ -26,19 +30,21 @@ exports.handler = async (event, context) => {
                 body: body,
             });
 
-            // Check if the response is successful
             if (response.ok) {
+                console.log('File created successfully!');
                 return {
                     statusCode: 200,
                     body: JSON.stringify({ message: 'File created and committed successfully!' }),
                 };
             } else {
+                console.log('GitHub API response error:', await response.text());
                 return {
                     statusCode: 400,
                     body: JSON.stringify({ error: 'Failed to create file on GitHub.' }),
                 };
             }
         } catch (error) {
+            console.error('Error occurred while making GitHub API request:', error);
             return {
                 statusCode: 500,
                 body: JSON.stringify({ error: 'Internal Server Error' }),
@@ -46,7 +52,6 @@ exports.handler = async (event, context) => {
         }
     }
 
-    // Handle methods other than POST
     return {
         statusCode: 405,
         body: JSON.stringify({ error: 'Method not allowed' }),

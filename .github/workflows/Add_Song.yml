@@ -1,0 +1,33 @@
+name: Add Song and ID
+
+on:
+  workflow_dispatch:
+    inputs:
+      file_content:
+        description: 'Content of the new file'
+        required: true
+        default: 'This is the content of the file.'
+      new_file_name:
+        description: 'New name of the file (including extension)'
+        required: true
+        default: 'newfile.txt'
+
+jobs:
+  add_and_rename_file:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+
+      - name: Create a new file with content
+        run: |
+          echo "${{ github.event.inputs.file_content }}" > ${{ github.event.inputs.new_file_name }}
+
+      - name: Commit and push the changes
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
+          git add .
+          git commit -m "Add and rename file: ${{ github.event.inputs.new_file_name }}"
+          git push

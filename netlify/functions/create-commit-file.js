@@ -20,7 +20,7 @@ exports.handler = async (event, context) => {
 
     console.log('Function triggered'); // Add log to confirm the function is triggered
 
-    if (true) //event.httpMethod === 'POST') {
+    if (true){ //event.httpMethod === 'POST') {
         // Log incoming event data
         console.log('Received event:', event);
 

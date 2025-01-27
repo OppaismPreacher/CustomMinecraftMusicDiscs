@@ -147,6 +147,8 @@
       body: JSON.stringify(formData),  // Sending the form data as JSON
     });
 
+    
+/*
     // Log the raw response text
     const rawResponse = await response.text();
     console.log("Raw Response:", rawResponse); // Log the response body
@@ -169,7 +171,7 @@
       responseMessage.style.color = "#721c24";
       responseMessage.textContent = result.error || "Failed to run the log function.";
     }
-
+*/
     responseMessage.style.display = "block";
   } catch (error) {
     responseMessage.style.backgroundColor = "#f8d7da";

@@ -140,11 +140,12 @@
   try {
     // Call the simple-log function with POST request and send the data
     const response = await fetch("https://darling-klepon-2a4c36.netlify.app/.netlify/functions/simple-log", {
-      method: "POST",  // Change to POST
-      headers: {
-        "Content-Type": "application/json",  // Sending JSON data
-      },
-      body: JSON.stringify(formData),  // Sending the form data as JSON
+      mthod: "GET"
+        //method: "POST",  // Change to POST
+      //headers: {
+      //  "Content-Type": "application/json",  // Sending JSON data
+      //},
+      //body: JSON.stringify(formData),  // Sending the form data as JSON
     });
 
     

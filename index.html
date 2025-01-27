@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub File Manager</title>
+</head>
+<body>
+    <h1>GitHub File Manager</h1>
+    <form id="fileForm">
+        <input type="text" id="fileName" placeholder="File name" required>
+        <textarea id="fileContent" placeholder="File content" required></textarea>
+        <button type="submit">Create & Commit File</button>
+    </form>
+
+    <script>
+        document.getElementById('fileForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const fileName = document.getElementById('fileName').value;
+            const fileContent = document.getElementById('fileContent').value;
+
+            // Send request to the serverless function to create and commit the file
+            fetch('/create-commit-file', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ fileName, fileContent })
+            })
+            .then(response => response.json())
+            .then(data => alert('File created and committed!'))
+            .catch(error => alert('Error: ' + error.message));
+        });
+    </script>
+</body>
+</html>

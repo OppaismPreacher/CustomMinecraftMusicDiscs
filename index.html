@@ -48,7 +48,7 @@
       <input type="file" id="fileUpload" name="fileUpload" multiple>
 
       <!-- Text Field -->
-      <input type="text" id="userText" name="userText" placeholder="Enter some text" required>
+      <input type="text" id="userText" name="userText" placeholder="Enter file name" required>
 
       <!-- Submit Button -->
       <button type="button" onclick="submitForm()">Submit</button>
@@ -64,15 +64,30 @@
       const files = fileInput.files;
       const userText = textInput.value;
 
-      // Display the data (you can process or send it elsewhere)
-      console.log("Text:", userText);
-      console.log("Files:");
-      for (let i = 0; i < files.length; i++) {
-        console.log(files[i].name);
+      // Check if a file is selected and text is entered
+      if (files.length === 0 || !userText) {
+        alert("Please provide a file and a name.");
+        return;
       }
-      
-      // Optionally, display a message
-      alert("Form submitted!");
+
+      const formData = new FormData();
+      formData.append("file", files[0]); // Add the first file
+      formData.append("name", userText); // Add the name
+
+      // Send the file and text to the backend
+      fetch("https://your-backend-api.com/upload", {
+        method: "POST",
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        alert("File uploaded and renamed successfully!");
+      })
+      .catch(error => {
+        console.error("Error:", error);
+        alert("An error occurred while uploading the file.");
+      });
     }
   </script>
 </body>

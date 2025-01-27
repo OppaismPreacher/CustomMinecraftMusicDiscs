@@ -162,6 +162,7 @@
       console.error("Error parsing JSON:", e);
       result = { message: rawResponse }; // If not JSON, treat as message
     }
+      */
 
     if (response.ok) {
       responseMessage.style.backgroundColor = "#d4edda";
@@ -172,7 +173,7 @@
       responseMessage.style.color = "#721c24";
       responseMessage.textContent = result.error || "Failed to run the log function.";
     }
-*/
+
     responseMessage.style.display = "block";
   } catch (error) {
     responseMessage.style.backgroundColor = "#f8d7da";

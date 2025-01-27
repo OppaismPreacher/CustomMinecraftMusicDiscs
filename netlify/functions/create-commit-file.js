@@ -17,62 +17,69 @@ async function loadFetch() {
 const { GITHUB_TOKEN, REPO_OWNER, REPO_NAME } = process.env;
 
 exports.handler = async (event, context) => {
+    console.log('Function triggered');
 
-    console.log('Function triggered'); // Add log to confirm the function is triggered
+    if (event.httpMethod !== 'POST') {
+        return {
+            statusCode: 405,
+            body: JSON.stringify({ error: 'Method not allowed' }),
+        };
+    }
 
-    if (true){ //event.httpMethod === 'POST') {
-        // Log incoming event data
-        console.log('Received event:', event);
+    console.log('Received event:', event);
 
+    try {
         const { fileName, fileContent } = JSON.parse(event.body);
 
-        // Log parsed data
+        if (!fileName || !fileContent) {
+            console.error('Invalid input: Missing fileName or fileContent');
+            return {
+                statusCode: 400,
+                body: JSON.stringify({ error: 'fileName and fileContent are required' }),
+            };
+        }
+
         console.log('File name:', fileName);
         console.log('File content length:', fileContent.length);
 
         const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${fileName}`;
-
         const body = JSON.stringify({
             message: `Create file: ${fileName}`,
-            content: Buffer.from(fileContent).toString('base64')
+            content: Buffer.from(fileContent).toString('base64'),
         });
 
-        try {
-            const fetch = await loadFetch(); // Ensure fetch is loaded dynamically
-            console.log('Making API request to GitHub...');
-            const response = await fetch(url, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `Bearer ${GITHUB_TOKEN}`,
-                    'Content-Type': 'application/json',
-                },
-                body: body,
-            });
+        const fetch = await loadFetch(); // Dynamically load fetch if necessary
 
-            if (response.ok) {
-                console.log('File created successfully!');
-                return {
-                    statusCode: 200,
-                    body: JSON.stringify({ message: 'File created and committed successfully!' }),
-                };
-            } else {
-                console.log('GitHub API response error:', await response.text());
-                return {
-                    statusCode: 400,
-                    body: JSON.stringify({ error: 'Failed to create file on GitHub.' }),
-                };
-            }
-        } catch (error) {
-            console.error('Error occurred while making GitHub API request:', error);
+        console.log('Making API request to GitHub...');
+        const response = await fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${GITHUB_TOKEN}`,
+                'Content-Type': 'application/json',
+            },
+            body: body,
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('GitHub API response error:', errorText);
             return {
-                statusCode: 500,
-                body: JSON.stringify({ error: 'Internal Server Error' }),
+                statusCode: response.status,
+                body: JSON.stringify({ error: `GitHub API error: ${errorText}` }),
             };
         }
-    }
 
-    return {
-        statusCode: 405,
-        body: JSON.stringify({ error: 'Method not allowed' }),
-    };
+        console.log('File created successfully!');
+        return {
+            statusCode: 200,
+            body: JSON.stringify({ message: 'File created and committed successfully!' }),
+        };
+
+    } catch (error) {
+        console.error('Error occurred:', error);
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ error: 'Internal Server Error' }),
+        };
+    }
 };

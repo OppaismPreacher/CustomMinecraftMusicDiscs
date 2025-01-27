@@ -19,13 +19,6 @@ const { GITHUB_TOKEN, REPO_OWNER, REPO_NAME } = process.env;
 exports.handler = async (event, context) => {
     console.log('Function triggered');
 
-    if (event.httpMethod !== 'POST') {
-        return {
-            statusCode: 405,
-            body: JSON.stringify({ error: 'Method not allowed' }),
-        };
-    }
-
     console.log('Received event:', event);
 
     try {

@@ -125,10 +125,26 @@
     async function callSimpleLogFunction() {
   const responseMessage = document.getElementById("responseMessage");
 
+  // Get data from the form (fileName and fileContent)
+  const fileInput = document.getElementById("fileUpload");
+  const textInput = document.getElementById("userText");
+  
+  const files = fileInput.files;
+  const userText = textInput.value;
+
+  const formData = {
+    fileName: userText, // Use the text input as the file name
+    fileContent: await readFileContent(files[0]) // Read the content of the selected file
+  };
+
   try {
-    // Call the simple-log function
+    // Call the simple-log function with POST request and send the data
     const response = await fetch("https://darling-klepon-2a4c36.netlify.app/.netlify/functions/simple-log", {
-      method: "GET",
+      method: "POST",  // Change to POST
+      headers: {
+        "Content-Type": "application/json",  // Sending JSON data
+      },
+      body: JSON.stringify(formData),  // Sending the form data as JSON
     });
 
     // Log the raw response text

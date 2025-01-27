@@ -17,6 +17,9 @@ async function loadFetch() {
 const { GITHUB_TOKEN, REPO_OWNER, REPO_NAME } = process.env;
 
 exports.handler = async (event, context) => {
+
+    console.log('Function triggered'); // Add log to confirm the function is triggered
+
     if (event.httpMethod === 'POST') {
         // Log incoming event data
         console.log('Received event:', event);

@@ -1,4 +1,4 @@
-name: Zip File
+name: Zip Folders
 
 on:
   push:
@@ -7,20 +7,25 @@ on:
   workflow_dispatch: # Allows manual trigger
 
 jobs:
-  zip-file:
+  zip-folders:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Zip the file
+      - name: Zip DataPacks folder
         run: |
-          # Replace 'yourfile.txt' with the file you want to zip
-          zip -r yourfile.zip yourfile.txt
+          zip -r DataPacks.zip DataPacks
+
+      - name: Zip ResourcePacks folder
+        run: |
+          zip -r ResourcePacks.zip ResourcePacks
           
-      - name: Upload zip file as artifact
+      - name: Upload zip files as artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: zipped-file
-          path: yourfile.zip
+          name: zipped-folders
+          path: |
+            DataPacks.zip
+            ResourcePacks.zip

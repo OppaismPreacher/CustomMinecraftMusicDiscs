@@ -1,18 +1,16 @@
 exports.handler = async (event) => {
+  console.log("Full Event Object:", event);
+
   try {
+      let requestBody = event.body;
 
-      console.log(event);
+      if (event.isBase64Encoded) {
+          // Decode the Base64 string into plain text
+          requestBody = Buffer.from(event.body, "base64").toString("utf8");
+      }
 
-      // Parse the JSON payload
-      const { id, file } = JSON.parse(event.body);
-
-      // Decode the Base64-encoded binary file
-      const binaryFile = Buffer.from(file, "base64");
-
-      console.log("ID:", id);
-      console.log("Binary File:", binaryFile);
-
-      // Process the data (e.g., save it, commit to GitHub, etc.)
+      const { id, file } = JSON.parse(requestBody);
+      console.log("Parsed Body:", { id, file });
 
       return {
           statusCode: 200,
@@ -23,7 +21,7 @@ exports.handler = async (event) => {
 
       return {
           statusCode: 500,
-          body: JSON.stringify({ message: "Internal Server Error" }),
+          body: JSON.stringify({ message: "Internal Server Error", error: error.message }),
       };
   }
 };

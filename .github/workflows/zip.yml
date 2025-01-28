@@ -14,13 +14,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Zip DataPack folder
+      - name: Zip DataPack contents
         run: |
-          zip -r DataPack.zip DataPack
+          zip -r DataPack.zip DataPack/*  # Zip contents of the DataPack folder
 
-      - name: Zip ResourcePack folder
+      - name: Zip ResourcePack contents
         run: |
-          zip -r ResourcePack.zip ResourcePack
+          zip -r ResourcePack.zip ResourcePack/*  # Zip contents of the ResourcePack folder
           
       - name: Set up Git for push
         run: |

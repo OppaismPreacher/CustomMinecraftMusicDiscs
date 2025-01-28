@@ -5,19 +5,5 @@
                 "name": "records/testSong"
             }
         ]
-    },
-    "music_disc.file232323": {
-        "sounds": [
-            {
-                "name": "records/file232323"
-            }
-        ]
-    },
-    "music_disc.bomba": {
-        "sounds": [
-            {
-                "name": "records/bomba"
-            }
-        ]
     }
 }

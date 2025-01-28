@@ -12,7 +12,7 @@
                 "name": "records/japaneseshamisen",
                 "stream": true,
                 "volume": 3.0,
-                "attenuation_distance": 15
+                "attenuation_distance": 4
             }
         ]
     }

@@ -1,5 +1,6 @@
 exports.handler = async (event) => {
   try {
+      console.log("Raw Body Received:", event);
       console.log("Raw Body Received:", event.body);
 
       return {

@@ -16,11 +16,11 @@ jobs:
 
       - name: Zip DataPacks folder
         run: |
-          zip -r DataPacks.zip DataPacks
+          zip -r DataPack.zip DataPack
 
       - name: Zip ResourcePacks folder
         run: |
-          zip -r ResourcePacks.zip ResourcePacks
+          zip -r ResourcePack.zip ResourcePack
           
       - name: Upload zip files as artifacts
         uses: actions/upload-artifact@v3

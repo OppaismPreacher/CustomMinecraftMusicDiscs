@@ -12,5 +12,12 @@
                 "name": "records/file232323"
             }
         ]
+    },
+    "music_disc.bomba": {
+        "sounds": [
+            {
+                "name": "records/bomba"
+            }
+        ]
     }
 }

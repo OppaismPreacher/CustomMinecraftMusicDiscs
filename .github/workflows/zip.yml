@@ -35,12 +35,12 @@ jobs:
 
       - name: Create a new branch for zips
         run: |
-          git checkout -b zips || git checkout zips  # Check if the branch exists or create a new one
+          git checkout --orphan zips  # Create a new branch with no history
+          git reset --hard  # Remove all files from the working directory
           mkdir -p zips  # Create the 'zips' directory
           mv DataPack.zip ResourcePack.zip zips/  # Move the .zip files to 'zips/'
-          git status  # Show status to confirm changes
-          git add zips/  # Stage the changes
-          git commit -m "Add zip files"  # Commit the changes
+          git add zips/  # Stage the zip files
+          git commit -m "Add zip files"  # Commit only the zip files
           
       - name: Debug after commit
         run: |
@@ -49,7 +49,7 @@ jobs:
 
       - name: Push zip files to the zips branch
         run: |
-          git push --force origin zips  # Push to the 'zips' branch
+          git push --force origin zips  # Push the 'zips' branch
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

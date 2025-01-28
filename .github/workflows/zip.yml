@@ -14,29 +14,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: List files in the repository
-        run: |
-          ls -R
-
       - name: Zip DataPack folder
         run: |
-          if [ -d "DataPack" ]; then
-            zip -r DataPack.zip DataPacks
-            ls -l DataPack.zip  # Check if the zip file was created
-          else
-            echo "DataPack folder not found!"
-            exit 1
-          fi
+          zip -r DataPack.zip DataPack
 
       - name: Zip ResourcePack folder
         run: |
-          if [ -d "ResourcePack" ]; then
-            zip -r ResourcePack.zip ResourcePacks
-            ls -l ResourcePack.zip  # Check if the zip file was created
-          else
-            echo "ResourcePack folder not found!"
-            exit 1
-          fi
+          zip -r ResourcePack.zip ResourcePack
           
       - name: Upload zip files as artifacts
         uses: actions/upload-artifact@v3

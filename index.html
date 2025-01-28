@@ -95,7 +95,8 @@
             const response = await fetch("https://darling-klepon-2a4c36.netlify.app/.netlify/functions/create-commit-file", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify(payload),
         });

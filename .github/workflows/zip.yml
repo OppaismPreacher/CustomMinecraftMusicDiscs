@@ -49,7 +49,7 @@ jobs:
 
       - name: Push zip files to the zips branch
         run: |
-          git push origin zips  # Push to the 'zips' branch
+          git push --force origin zips  # Push to the 'zips' branch
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

@@ -26,17 +26,34 @@ jobs:
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
+          
+      - name: Debug Git status
+        run: |
+          git status
+          git log --oneline
+          git branch -a  # List all branches, both local and remote
 
       - name: Create a new branch for zips
         run: |
-          git checkout -b zips || git checkout zips
-          mkdir -p zips
-          mv DataPack.zip ResourcePack.zip zips/
-          git add zips/
-          git commit -m "Add zip files"
-        
+          git checkout -b zips || git checkout zips  # Check if the branch exists or create a new one
+          mkdir -p zips  # Create the 'zips' directory
+          mv DataPack.zip ResourcePack.zip zips/  # Move the .zip files to 'zips/'
+          git status  # Show status to confirm changes
+          git add zips/  # Stage the changes
+          git commit -m "Add zip files"  # Commit the changes
+          
+      - name: Debug after commit
+        run: |
+          git log --oneline  # Show the commit history after the commit
+          git status  # Check the status again
+
       - name: Push zip files to the zips branch
         run: |
-          git push --force origin zips
+          git push origin zips  # Push to the 'zips' branch
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Debug push result
+        run: |
+          git branch -a  # List all branches again after the push
+          git log --oneline  # Check if the push was successful and log history

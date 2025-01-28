@@ -79,7 +79,7 @@
         formData.append("fileName", userText); // Append the text data
         formData.append("file", file); // Append the Blob (MP3 file)
 
-        const payload = { id: "test", file: "testfile" };
+        const payload = { "id": "test", "file": "testfile" };
 
         // Send the data to the Netlify function (to create and rename the file)
         try {

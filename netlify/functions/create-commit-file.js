@@ -1,5 +1,8 @@
 exports.handler = async (event) => {
   try {
+
+      console.log(event);
+
       // Parse the JSON payload
       const { id, file } = JSON.parse(event.body);
 

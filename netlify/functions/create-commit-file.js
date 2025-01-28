@@ -1,48 +1,26 @@
-const formidable = require('formidable');
-
-exports.handler = async (event, context) => {
+exports.handler = async (event) => {
   try {
-    // Ensure the request is a POST method
-    if (event.httpMethod !== 'POST') {
+      // Parse the JSON payload
+      const { id, file } = JSON.parse(event.body);
+
+      // Decode the Base64-encoded binary file
+      const binaryFile = Buffer.from(file, "base64");
+
+      console.log("ID:", id);
+      console.log("Binary File:", binaryFile);
+
+      // Process the data (e.g., save it, commit to GitHub, etc.)
+
       return {
-        statusCode: 405,
-        body: JSON.stringify({ message: 'Method Not Allowed' }),
-      };
-    }
-
-    // Parse the form data
-    const form = new formidable.IncomingForm();
-
-    return new Promise((resolve, reject) => {
-      form.parse(event, (err, fields, files) => {
-        if (err) {
-          console.error('Error parsing form:', err);
-          return reject({
-            statusCode: 500,
-            body: JSON.stringify({ message: 'Internal Server Error' }),
-          });
-        }
-
-        // Access the form fields (e.g., fileName)
-        const fileName = fields.fileName[0]; // Assuming it's the first field
-        const file = files.file[0]; // The uploaded file
-
-        // Log the received data
-        console.log('Received file name:', fileName);
-        console.log('Received file data:', file);
-
-        // Respond with success
-        resolve({
           statusCode: 200,
-          body: JSON.stringify({ message: 'File received successfully' }),
-        });
-      });
-    });
+          body: JSON.stringify({ message: "Data received successfully" }),
+      };
   } catch (error) {
-    console.error('Error:', error);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ message: 'Internal Server Error' }),
-    };
+      console.error("Error processing data:", error);
+
+      return {
+          statusCode: 500,
+          body: JSON.stringify({ message: "Internal Server Error" }),
+      };
   }
 };

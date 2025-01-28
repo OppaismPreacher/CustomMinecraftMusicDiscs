@@ -1,0 +1,26 @@
+name: Zip File
+
+on:
+  push:
+    branches:
+      - main  # Or any other branch you want to trigger this on
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  zip-file:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Zip the file
+        run: |
+          # Replace 'yourfile.txt' with the file you want to zip
+          zip -r yourfile.zip yourfile.txt
+          
+      - name: Upload zip file as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: zipped-file
+          path: yourfile.zip

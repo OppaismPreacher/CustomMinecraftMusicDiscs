@@ -5,5 +5,15 @@
                 "name": "records/testsong"
             }
         ]
+    },
+    "music_disc.japaneseshamisen": {
+        "sounds": [
+            {
+                "name": "records/japaneseshamisen",
+                "stream": true,
+                "volume": 1.0,
+                "attenuation_distance": 30
+            }
+        ]
     }
 }

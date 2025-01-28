@@ -1,1 +1,1 @@
-# CustomMinecraftMusicDisks
+# CustomMinecraftMusicDiscs

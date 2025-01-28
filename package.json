@@ -1,7 +1,23 @@
 {
-    "name": "CustomMinecraftMusicDisks",
-    "version": "1.0.0",
-    "dependencies": {
-      "node-fetch": "^3.2.0"
-    }
+  "name": "customminecraftmusicdisks",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OppaismPreacher/CustomMinecraftMusicDisks.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OppaismPreacher/CustomMinecraftMusicDisks/issues"
+  },
+  "homepage": "https://github.com/OppaismPreacher/CustomMinecraftMusicDisks#readme",
+  "dependencies": {
+    "formidable": "^3.5.2"
   }
+}

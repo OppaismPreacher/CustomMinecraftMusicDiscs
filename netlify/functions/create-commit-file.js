@@ -1,17 +1,12 @@
-const Busboy = require("busboy");
+const Busboy = require("busboy").default;
 
 exports.handler = async (event) => {
     if (event.httpMethod !== "POST") {
-
-        console.log("Not POST");
-
         return {
             statusCode: 405,
             body: "Method Not Allowed",
         };
     }
-
-    console.log(event);
 
     return new Promise((resolve, reject) => {
         const busboy = new Busboy({

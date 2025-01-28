@@ -1,48 +1,71 @@
-const formidable = require("formidable");
+const Busboy = require("busboy");
 
 exports.handler = async (event) => {
-    try {
-        // Ensure the request is a POST
-        if (event.httpMethod !== "POST") {
-            console.log("Not a POST method");
-            return {
-                statusCode: 405,
-                body: "Method Not Allowed",
-            };
-        }
+    if (event.httpMethod !== "POST") {
 
+        console.log("Not POST");
 
-        console.log("event");
+        return {
+            statusCode: 405,
+            body: "Method Not Allowed",
+        };
+    }
 
-        // Parse the form data
-        const form = new formidable.IncomingForm();
+    console.log(event);
 
-        return new Promise((resolve, reject) => {
-            form.parse(event, (err, fields, files) => {
-                if (err) {
-                    console.error("Error parsing form data:", err);
-                    reject({
-                        statusCode: 500,
-                        body: "Internal Server Error",
-                    });
-                    return;
-                }
+    return new Promise((resolve, reject) => {
+        const busboy = new Busboy({
+            headers: {
+                "content-type": event.headers["content-type"],
+            },
+        });
 
-                console.log("Text Field:", fields); // The text field
-                console.log("File Field:", files); // The uploaded file
+        const fields = {};
+        const files = [];
 
-                resolve({
-                    statusCode: 200,
-                    body: `Received text: ${fields.text}, file name: ${files.file.originalFilename}`,
+        busboy.on("field", (fieldname, val) => {
+            fields[fieldname] = val;
+        });
+
+        busboy.on("file", (fieldname, file, filename, encoding, mimetype) => {
+            let fileBuffer = Buffer.alloc(0);
+
+            file.on("data", (data) => {
+                fileBuffer = Buffer.concat([fileBuffer, data]);
+            });
+
+            file.on("end", () => {
+                files.push({
+                    fieldname,
+                    filename,
+                    encoding,
+                    mimetype,
+                    content: fileBuffer.toString("base64"), // Encode file content as base64
                 });
             });
         });
-    } catch (error) {
-        console.error("Error processing request:", error);
 
-        return {
-            statusCode: 500,
-            body: "Internal Server Error",
-        };
-    }
+        busboy.on("finish", () => {
+            console.log("Fields:", fields);
+            console.log("Files:", files);
+
+            resolve({
+                statusCode: 200,
+                body: JSON.stringify({
+                    message: "Data received",
+                    fields,
+                    files,
+                }),
+            });
+        });
+
+        busboy.on("error", (error) => {
+            reject({
+                statusCode: 500,
+                body: `Error parsing form data: ${error.message}`,
+            });
+        });
+
+        busboy.end(Buffer.from(event.body, "base64"));
+    });
 };

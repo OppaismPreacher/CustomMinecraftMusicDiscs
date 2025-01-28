@@ -1,9 +1,9 @@
 exports.handler = async (event) => {
-  console.log("Full Event Object:", event);
-
   try {
       let requestBody = event.body;
 
+      console.log("Full Event Object:", requestBody);
+      
       if (event.isBase64Encoded) {
           // Decode the Base64 string into plain text
           requestBody = Buffer.from(event.body, "base64").toString("utf8");

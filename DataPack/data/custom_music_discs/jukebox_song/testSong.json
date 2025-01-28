@@ -1,0 +1,8 @@
+{
+    "comparator_output": 15,
+    "description": "testSong",
+    "length_in_seconds": 30.0,
+    "sound_event":{
+        "sound_id": "minecraft:music_disc.testSong"
+    }
+}

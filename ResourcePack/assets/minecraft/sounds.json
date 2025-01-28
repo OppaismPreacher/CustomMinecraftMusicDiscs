@@ -1,2 +1,9 @@
 {
+    "music_disc.testSong":{
+        "sounds": [
+            {
+                "name": "records/testSong"
+            }
+        ]
+    }
 }

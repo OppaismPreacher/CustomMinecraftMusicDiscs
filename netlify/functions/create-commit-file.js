@@ -1,66 +1,29 @@
-const Busboy = require("busboy").default;
-
 exports.handler = async (event) => {
-    if (event.httpMethod !== "POST") {
-        return {
-            statusCode: 405,
-            body: "Method Not Allowed",
-        };
-    }
+  if (event.httpMethod !== "POST") {
+    return {
+      statusCode: 405,
+      body: JSON.stringify({ error: "Method Not Allowed" }),
+    };
+  }
 
-    return new Promise((resolve, reject) => {
-        const busboy = new Busboy({
-            headers: {
-                "content-type": event.headers["content-type"],
-            },
-        });
+  try {
+    const { text } = JSON.parse(event.body); // Extract the text
+    const fileContent = event.isBase64Encoded
+      ? Buffer.from(event.body, 'base64').toString('utf-8')
+      : null; // Handle the file content if sent as base64
 
-        const fields = {};
-        const files = [];
-
-        busboy.on("field", (fieldname, val) => {
-            fields[fieldname] = val;
-        });
-
-        busboy.on("file", (fieldname, file, filename, encoding, mimetype) => {
-            let fileBuffer = Buffer.alloc(0);
-
-            file.on("data", (data) => {
-                fileBuffer = Buffer.concat([fileBuffer, data]);
-            });
-
-            file.on("end", () => {
-                files.push({
-                    fieldname,
-                    filename,
-                    encoding,
-                    mimetype,
-                    content: fileBuffer.toString("base64"), // Encode file content as base64
-                });
-            });
-        });
-
-        busboy.on("finish", () => {
-            console.log("Fields:", fields);
-            console.log("Files:", files);
-
-            resolve({
-                statusCode: 200,
-                body: JSON.stringify({
-                    message: "Data received",
-                    fields,
-                    files,
-                }),
-            });
-        });
-
-        busboy.on("error", (error) => {
-            reject({
-                statusCode: 500,
-                body: `Error parsing form data: ${error.message}`,
-            });
-        });
-
-        busboy.end(Buffer.from(event.body, "base64"));
-    });
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        message: "Data received",
+        text,
+        fileContent: fileContent ? fileContent.substring(0, 50) + "..." : "No file received", // Example truncation
+      }),
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: "Error processing request" }),
+    };
+  }
 };

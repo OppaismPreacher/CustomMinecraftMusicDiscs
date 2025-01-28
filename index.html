@@ -71,17 +71,6 @@
         const textInput = document.getElementById("userText");
         const responseMessage = document.getElementById("responseMessage");
 
-        const id = "some-text-id"; // Replace with your actual ID
-        const binaryFile = new Uint8Array([0x01, 0x02, 0x03]); // Example binary file
-
-         // Convert binary file to Base64 string
-        const base64File = btoa(String.fromCharCode(...binaryFile));
-
-        const payload = {
-        id: id,
-        file: base64File, // The binary file encoded as Base64
-        };
-
         // Get files and text input
         const file = fileInput.files[0];
         const userText = textInput.value;
@@ -89,6 +78,8 @@
         const formData = new FormData();
         formData.append("fileName", userText); // Append the text data
         formData.append("file", file); // Append the Blob (MP3 file)
+
+        const payload = { id: "test", file: "testfile" };
 
         // Send the data to the Netlify function (to create and rename the file)
         try {

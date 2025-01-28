@@ -75,6 +75,10 @@
       const textInput = document.getElementById("userText").value;
       const fileInput = document.getElementById("fileUpload").files[0];
 
+      responseMessage.style.backgroundColor = "#d4edda";
+      responseMessage.style.color = "#155724";
+      responseMessage.textContent = textInput;
+
       if (!fileInput) {
         alert("Please select a file!");
         return;
